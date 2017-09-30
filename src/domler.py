@@ -2,7 +2,7 @@
 
 """
 Copyright (c) 2017
-See the file 'doc/COPYING' for copying permission
+
 """
 
 from urllib2 import Request, urlopen
@@ -21,6 +21,10 @@ def isread(url):
     return False
 
 def read_url(url):
+    """
+    :param url: target to find subfolders
+    :return:
+    """
     global subdomains
     global url_original
     url = url.replace(" ","%20")
@@ -39,7 +43,10 @@ def read_url(url):
         url_new = file_name
         url_new = url_new.replace(" ","%20")
         if "http" not in url_new:
-           url_new = url_original + "/" + url_new
+            if url_new[0] != "/":
+                url_new = url_original + "/" + url_new
+            else:
+                url_new = url_original + url_new
         try:
             if (isread(url_new) == False and (url_original in url_new)):
                 subdomains.append(url_new)
@@ -84,13 +91,6 @@ def main():
     subdomains.append(url_original)
     read_url(url_original)
     return subdomains
-
-# subdomains.append("https://clanjhoo.com")
-# read_url("http://leones.gov.ar")
-# url_original = "https://clanjhoo.com"
-# url_original = "http://www.uclm.es"
-# subdomains.append(url_original)
-# read_url(url_original)
 
 if __name__ == "__main__":
     main()
